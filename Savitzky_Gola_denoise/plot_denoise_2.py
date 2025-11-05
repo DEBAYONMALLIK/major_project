@@ -12,7 +12,7 @@ def read_oscilloscope_data(filename):
 
 
 
-def savgol_denoising(signal, window_length=15, polyorder=3):
+def savgol_denoising(signal, window_length=20, polyorder=3):
     """
     Savitzky-Golay filter denoising
     - window_length: should be odd integer, larger = more smoothing
@@ -28,7 +28,7 @@ def savgol_denoising(signal, window_length=15, polyorder=3):
 
 
 # Main code
-filename = "major_project/Savitzky_Gola_denoise/unhealthy_1.CSV"  
+filename = "major_project/Savitzky_Gola_denoise/F0050CH1.CSV"  
 time, magnitude = read_oscilloscope_data(filename)
 
 print(f"Loaded {len(time)} data points")
@@ -37,9 +37,6 @@ print(f"Original signal STD: {np.std(magnitude):.6f} V")
 
 
 
-# --- Load your data ---
-filename = "major_project/wavelt_denoising/unhealthy_1.CSV" 
-time, magnitude = read_oscilloscope_data(filename)
 
 # --- Define parameters to test ---
 # (polynomial order, window length)
@@ -47,8 +44,8 @@ time, magnitude = read_oscilloscope_data(filename)
 # vary polynominal and window size
 # p(y) = a0+xa1+x^2a2+.....
 
-poly=3
-window=101
+poly=4
+window=303
 
 plt.figure(figsize=(15, 8))
 plt.plot(time, magnitude, 'k-', alpha=0.3, label='Original Signal')

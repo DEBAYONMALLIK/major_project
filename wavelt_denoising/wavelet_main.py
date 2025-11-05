@@ -4,6 +4,8 @@ import numpy as np
 import pywt
 from scipy.signal import savgol_filter
 
+from wavelet_func import wavelet_denoising
+
 def read_oscilloscope_data(filename):
     df=pd.read_csv(filename,header=None,sep=',',
                    usecols=[3,4],
@@ -12,28 +14,9 @@ def read_oscilloscope_data(filename):
 
 
 
-def wavelet_denoising(signal,wavelet="db4",level=4): # CHANGE(VARY) WAVELET,LEVEL
-
-    coeffs=pywt.wavedec(signal, wavelet, level=level)
-    
-    sigma=np.median(np.abs(coeffs[-level]))/0.6745
-    threshold=sigma * np.sqrt(2* np.log(len(signal)))
-
-    coeffs_thresholded = [coeffs[0]]  
-
-    for i in range(1,len(coeffs)):
-        coeffs_thresholded.append(pywt.threshold(coeffs[i],threshold,mode='soft'))
-
-    denoised=pywt.waverec(coeffs_thresholded, wavelet)    
-
-    if len(denoised) != len(signal):
-        denoised = denoised[:len(signal)] if len(denoised) > len(signal) else np.pad(
-        denoised, (0, len(signal) - len(denoised)), 'edge')
-    return denoised    
 
 
-
-filename = "major_project/wavelt_denoising/unhealthy_1.CSV"  
+filename = "major_project/wavelt_denoising/F0050CH1.CSV"
 time, magnitude = read_oscilloscope_data(filename)
 
 
@@ -55,3 +38,6 @@ plt.show()
 print(f"Original signal STD: {np.std(magnitude):.6f}")
 print(f"Denoised signal STD: {np.std(denoised_magnitude):.6f}")
 print(f"Noise reduction: {((np.std(magnitude) - np.std(denoised_magnitude)) / np.std(magnitude) * 100):.1f}%")
+
+
+
